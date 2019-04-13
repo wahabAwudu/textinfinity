@@ -1,0 +1,19 @@
+-r base.txt
+
+# gunicorn
+gunicorn==19.9.0
+
+# boto for uploads
+boto==2.49.0
+
+# for amazon s3
+boto3==1.7.58
+
+# django storages for aws s3
+django-storages==1.6.6
+
+# whitenoise for staticfiles
+whitenoise==4.1
+
+# django redis
+django-redis==4.9.0

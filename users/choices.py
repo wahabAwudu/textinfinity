@@ -1,0 +1,5 @@
+pending = "PENDING"
+processing = "PROCESSING"
+confirmed = "CONFIRMED"
+active = "ACTIVE"
+inactive = "INACTIVE"
