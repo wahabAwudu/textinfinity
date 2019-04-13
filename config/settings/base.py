@@ -104,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 DATABASES = {
-    'default': env.db('DATABASE_URL', default='postgres:///textinfinitydb'),
+    'default': env.db('DATABASE_URL', default='postgres:///textinfinity'),
 }
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 

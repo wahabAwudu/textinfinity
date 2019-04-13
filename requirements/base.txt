@@ -10,9 +10,6 @@ djangorestframework-jwt==1.11.0
 # drf docs
 drfdocs
 
-# pillow for images
-Pillow==5.2.0
-
 # django allauth for user authentication
 django-allauth==0.36.0
 
@@ -25,26 +22,32 @@ django-crispy-forms==1.7.2
 # django environ
 django-environ==0.4.4
 
-# postgresql file
-psycopg2-binary==2.7.5
-
 # authentications mixins
 django-braces==1.13.0
 
 # django cors
 django-cors-headers==2.2.0
 
-# python decouple for environmental variables
-python-decouple==3.1
-
 # Ipython for the python shell
 ipython
+
+#open py excel
+openpyxl==2.6.1
 
 # testing packages
 pytest
 
+# postgresql file
+psycopg2-binary==2.7.5
+
+# pandas
+pandas==0.24.2
+
+# python decouple for environmental variables
+python-decouple==3.1
+
+# pillow for images
+Pillow==5.2.0
+
 # twilio
 twilio==6.19.2
-
-#open py excel
-openpyxl==2.6.1
