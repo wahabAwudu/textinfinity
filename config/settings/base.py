@@ -160,7 +160,7 @@ JWT_AUTH = {
 # Activating the Custom Serializers
 REST_AUTH_REGISTER_SERIALIZERS = {
         'REGISTER_SERIALIZER': 'users.custom_registration.CustomRegistrationSerializer',
-        # 'LOGIN_SERIALIZER': 'adesua.apps.general.users.register_serializer.LoginSerializer'
+        # 'LOGIN_SERIALIZER': 'users.register_serializer.LoginSerializer'
 }
 
 # Static files (CSS, JavaScript, Images)

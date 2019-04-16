@@ -9,7 +9,6 @@ from .models import User
 
 
 class UserModelSerializer(ModelSerializer):
-
     class Meta:
         model = User
         fields = [
