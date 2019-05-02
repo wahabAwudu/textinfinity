@@ -30,7 +30,8 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
-
+.vscode/
+staticfiles/
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
@@ -102,3 +103,5 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+*.pyc

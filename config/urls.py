@@ -36,6 +36,8 @@ router.register('messages', MessageModelViewset, base_name='messages')
 router.register('wallet', WalletModelViewset, base_name='wallet')
 router.register('deposits', DepositModelViewset, base_name='deposits')
 
+admin_router = routers.DefaultRouter()
+
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
     # path('docs/', include('rest_framework_docs.urls')),

@@ -1,6 +1,3 @@
-from decouple import config, Csv
-import requests
-
 from django.template.loader import render_to_string
 
 from rest_framework.viewsets import ModelViewSet
@@ -9,13 +6,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import list_route
 
-from twilio.rest import Client
-
 from .models import Message
 from .serializers import MessageModelSerializer
 
 from users.choices import processing, active, confirmed
 from lists.models import Number
+
+from .sms_triggers import mnotify_sms, twilio_sms, hubtel_sms
 
 
 class MessageModelViewset(ModelViewSet):
@@ -26,59 +23,22 @@ class MessageModelViewset(ModelViewSet):
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user.id)
 
-    # send hubtel sms
-    def hubtel_sms(self, sender, message, recipients):
-        url = "https://api.hubtel.com/v1/messages/send"
+    @list_route(methods=['POST'])
+    def send_sms(self, request):
+        sender_id = request.data['sender_id']
+        message = request.data['message']
+        recipients = request.data['recipients']
+        serializer = self.get_serializer(data=request.data)
+        # send sms with mnotify
+        status_code = None
+        response = mnotify_sms(sender_id, message, recipients)
 
-        for i in range(len(recipients)):
-            params = {
-                "From": sender,
-                "To": recipients[i],
-                "Content": message,
-                "ClientId": config('HUBTEL_CLIENT_ID'),
-                "ClientSecret": config('HUBTEL_CLIENT_SECRET'),
-                "RegisteredDelivery": "true"
-            }
-            resp = requests.get(url, params=params)
-
-        response = None
-        if resp.status_code == 201:
-            response = Response({"detail": "Message Sent Successfully"})
-        elif resp.status_code >= 400:
-            response = Response({"detail": "Error Sending Message, Try Again"})
-        return response
-        # end hubtel sms
-
-    # send sms using twilio
-    def send_messages(self, recipient, message):
-        twilio_account_sid = config('TWILIO_ACCOUNT_SID')
-        twilio_auth_token = config('TWILIO_AUTH_TOKEN')
-        twilio_number = config('TWILIO_NUMBER')
-
-        client = Client(twilio_account_sid, twilio_auth_token)
-
-        client.messages.create(to=recipient,
-                               from_=twilio_number,
-                               body=message,
-                               # status_callback="http://omakunta.com/"
-                               )
-
-        return Response({"detail": "Message Sent"}, status=status.HTTP_200_OK)
-        # end twilio sms
-
-        # send Mnotify sms
-    def mnotify_sms(self, sender, message, recipients):
-        url = 'https://api.mnotify.com/api/sms/quick'
-        params = {
-            "key": config('MNOTIFY_API_V2_KEY'),
-            "recipient[]": recipients,
-            "message": message,
-            "sender": sender,
-        }
-        # send the request
-        resp = requests.post(url, data=params)
-        return resp.json()
-        # end mnotify sms
+        if response['code'] == '2000':
+            status_code = status.HTTP_200_OK
+        else:
+            status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        print(response)
+        return Response({'detail': 'messages sent', }, status=status_code)
 
         # create the message for logs reason
     def create(self, request, *args, **kwargs):
@@ -93,8 +53,8 @@ class MessageModelViewset(ModelViewSet):
         message = request.data['text']
         recipients = contacts
 
-        # return response from sms method
-        sms_response = self.mnotify_sms(sender, message, recipients)
+        # send sms and return response
+        sms_response = mnotify_sms(sender, message, recipients)
 
         # save message after successful sending
         serializer.is_valid(raise_exception=True)
