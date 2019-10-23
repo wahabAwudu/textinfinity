@@ -1,5 +1,5 @@
 # django version 1.11.10
-django==2.1
+django==2.1.11
 
 # django rest framework
 djangorestframework==3.8.2
