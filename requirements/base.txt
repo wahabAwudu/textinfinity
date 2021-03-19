@@ -2,7 +2,7 @@
 django==2.1
 
 # django rest framework
-djangorestframework==3.8.2
+djangorestframework==3.11.2
 
 # rest jwt
 djangorestframework-jwt==1.11.0
